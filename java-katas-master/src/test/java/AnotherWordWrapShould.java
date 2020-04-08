@@ -38,9 +38,23 @@ public class AnotherWordWrapShould {
     }
     @Test
     public void wrap_when_text_length_is_greater_than_columnsWidth() {
-        assertThat(wordWrap("a longword", 6)).isEqualTo("a long\nword");
+        assertThat(wordWrap("alongword", 6)).isEqualTo("alongw\nord");
         assertThat(wordWrap("areallylongword", 6)).isEqualTo("areall\nylongw\nord");
     }
+    @Test
+    public void wrap_by_white_spaces() {
+        assertThat(wordWrap("hello world", 7)).isEqualTo("hello\nworld");
+        assertThat(wordWrap("a lot of words for a single line", 10))
+                .isEqualTo("a lot of\nwords for\na single\nline");
+        assertThat(wordWrap("this is a test", 4)).isEqualTo("this\nis a\ntest");
+    }
+/*    @Test
+    public void handle_extreme_cases() {
+        assertThat(wordWrap("          ", 4)).isEqualTo("          ");
+        assertThat(wordWrap("  more  than  one     space  ", 7))
+                .isEqualTo("   more  than  one     space  ");
+        assertThat(wordWrap("on a new\nline symbol", 9)).isEqualTo("on a\nnew\nline\nsymbol");
+    }*/
 
     private String wordWrap(String text, int columnsWidth) {
         if (columnsWidth < 1) {
@@ -50,13 +64,20 @@ public class AnotherWordWrapShould {
             return "";
         }
 
-        if (text.length() < columnsWidth) {
+        if (text.length() <= columnsWidth) {
             return text;
         }
-        String wrappedText = text.substring(0,columnsWidth) + "\n";
-        text = text.substring(columnsWidth);
-        wrappedText += wordWrap(text, columnsWidth);
-        return wrappedText;
+        int wrapIndex = columnsWidth;
+        int whiteSpaceIndex = text.substring(0, columnsWidth + 1)
+                .lastIndexOf(' ');
+        int skipWhiteSpace = 0;
+        if ((whiteSpaceIndex != -1) && (whiteSpaceIndex <= columnsWidth)) {
+            wrapIndex = whiteSpaceIndex;
+            skipWhiteSpace = 1;
+        }
+        String wrappedText = text.substring(0,wrapIndex) + "\n";
+        text = text.substring(wrapIndex + skipWhiteSpace);
+        return wrappedText + wordWrap(text, columnsWidth);
     }
 
 }

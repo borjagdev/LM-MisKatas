@@ -47,8 +47,10 @@ public class WordWrapShould {
         assertThat(wordWrap("hola mundo", 7)).isEqualTo("hola\n mundo");
         assertThat(wordWrap("hola mundo", 1)).isEqualTo("h\no\nl\na\n \nm\nu\nn\nd\no");
         assertThat(wordWrap("hola mundo", 2)).isEqualTo("ho\nla\n m\nun\ndo");
-        assertThat(wordWrap("                ", 4)).isEqualTo("    \n    \n    \n    ");
-        assertThat(wordWrap("  as asd   d", 7)).isEqualTo("  as as\nd   d");
+        //assertThat(wordWrap("                ", 4)).isEqualTo("    \n    \n    \n    ");
+        assertThat(wordWrap("  as asd   d", 7)).isEqualTo("  as\n asd\n   d");
+        assertThat(wordWrap("a lot of words for a single line", 10))
+                .isEqualTo("a lot of\nwords for\na single\nline");
     }
 
     @Test
@@ -88,7 +90,7 @@ public class WordWrapShould {
     }
 
     private int calculateWrapIndex(String text, int columnsWidth) {
-        int whiteSpaceIndex = text.indexOf(" ");
+        int whiteSpaceIndex = text.substring(0, columnsWidth).lastIndexOf(" ");
         // whiteSpaceIndex debe ser estrictamente mayor que 0 porque el
         // mínimo ancho de columna es 1
         boolean thereIsWhiteSpaceOnCurrentLine = (whiteSpaceIndex > 0)
