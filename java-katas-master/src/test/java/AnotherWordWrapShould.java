@@ -47,10 +47,12 @@ public class AnotherWordWrapShould {
         assertThat(wordWrap("a lot of words for a single line", 10))
                 .isEqualTo("a lot of\nwords for\na single\nline");
         assertThat(wordWrap("this is a test", 4)).isEqualTo("this\nis a\ntest");
+        assertThat(wordWrap("abc def ghixxxyyy", 3)).isEqualTo("abc\ndef\nghi\nxxx\nyyy");
     }
 /*    @Test
     public void handle_extreme_cases() {
         assertThat(wordWrap("          ", 4)).isEqualTo("          ");
+                -> si se usa .trim() en vez de +1 quita los espacios
         assertThat(wordWrap("  more  than  one     space  ", 7))
                 .isEqualTo("   more  than  one     space  ");
         assertThat(wordWrap("on a new\nline symbol", 9)).isEqualTo("on a\nnew\nline\nsymbol");
